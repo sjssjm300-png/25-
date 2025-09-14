@@ -16,6 +16,7 @@
     .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 6px 22px rgba(12,23,36,0.06)}
     label{display:block;font-weight:600;margin-bottom:6px}
     input[type=number], select, input[type=text]{width:100%;padding:8px;border-radius:8px;border:1px solid #e6eef0}
+    input::placeholder{color:#a0a0a0; opacity:1;} /* placeholder 회색 */
     button{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer}
     .muted{color:var(--muted);font-size:13px}
     #result{font-weight:700;margin-top:12px}
@@ -110,28 +111,21 @@
       };
 
       const $ = id => document.getElementById(id);
-      function safeNum(v){return v===""||v===null||isNaN(Number(v))?0:Number(v)}
+      function safeNum(v){return v && !isNaN(v) ? Number(v) : 0;} // 입력 없으면 0
 
       function calcAll(){
-        // 교통
         const car = safeNum($('car').value);
         const bus = safeNum($('bus').value);
         const subway = safeNum($('subway').value);
-
-        // 음식
         const drink = safeNum($('drink').value);
         const snack = safeNum($('snack').value);
         const meat = safeNum($('meat').value);
-
-        // 에너지/소비
         const acHours = safeNum($('ac_hours').value);
         const online = safeNum($('online_order').value);
         const plastic = safeNum($('plastic_bag').value);
 
-        // 에어컨 kWh 계산 (1시간당 1.2kWh)
         const acKwh = acHours * 1.2;
 
-        // 계산
         const t_car = car * CO2_FACTORS.car_km;
         const t_bus = bus * CO2_FACTORS.bus_km;
         const t_subway = subway * CO2_FACTORS.subway_km;
@@ -152,7 +146,6 @@
 
         $('result').innerHTML = `한 달 탄소발자국: <strong>${total.toFixed(2)} kg CO₂</strong><br>에어컨 사용 전력: <strong>${acKwh.toFixed(2)} kWh</strong>`;
 
-        // 상세 내역
         let html = '<ul class="break">';
         breakdown.forEach(([name,val])=>{
           html += `<li><strong>${name}:</strong> ${val.toFixed(2)} kg</li>`;
@@ -168,7 +161,8 @@
 
       $('calcBtn').addEventListener('click', ()=>calcAll());
       $('clearBtn').addEventListener('click', ()=>{
-        ['car','bus','subway','drink','snack','meat','ac_hours','online_order','plastic_bag'].forEach(id=>$id=>$(id).value='');
+        ['car','bus','subway','drink','snack','meat','ac_hours','online_order','plastic_bag']
+        .forEach(id => $(id).value=''); // 초기화
         $('result').innerText = '계산 결과가 여기에 표시됩니다.';
         $('breakdown').innerText = '아직 계산하지 않았습니다.';
       });
