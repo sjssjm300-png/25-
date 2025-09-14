@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>탄소발자국 계산기</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; max-width: 700px; margin: auto; background: #f5f5f5; }
+  h1 { text-align: center; }
+  .card {
+    background: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .card h2 { margin-top: 0; }
+  label { display: block; margin-top: 15px; font-weight: bold; }
+  input { width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; }
+  button { margin-top: 20px; padding: 12px 24px; border: none; border-radius: 8px; background: #4CAF50; color: white; font-size: 16px; cursor: pointer; }
+  button:hover { background: #45a049; }
+  .result { margin-top: 30px; padding: 20px; border-radius: 12px; background: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+  .result p { margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<h1>탄소발자국 계산기</h1>
+
+<div class="card">
+  <h2>교통</h2>
+  <label>자동차 이동 거리 (km/월): <input type="number" id="car" value="0" placeholder="예: 120"></label>
+  <label>버스 이동 거리 (km/월): <input type="number" id="bus" value="0" placeholder="예: 80"></label>
+  <label>지하철 이동 거리 (km/월): <input type="number" id="subway" value="0" placeholder="예: 60"></label>
+</div>
+
+<div class="card">
+  <h2>음식</h2>
+  <label>음료수 섭취 횟수 (회/월): <input type="number" id="drink" value="0" placeholder="예: 20"></label>
+  <label>과자 섭취 횟수 (회/월): <input type="number" id="snack" value="0" placeholder="예: 15"></label>
+  <label>고기 섭취 횟수 (회/월): <input type="number" id="meat" value="0" placeholder="예: 10"></label>
+</div>
+
+<div class="card">
+  <h2>에너지 / 소비</h2>
+  <label>에어컨 사용 시간 (시간/월): <input type="number" id="ac" value="0" placeholder="예: 120"></label>
+  <label>온라인 주문 횟수 (회/월): <input type="number" id="online" value="0" placeholder="예: 5"></label>
+  <label>일회용 비닐봉투 사용 횟수 (회/월): <input type="number" id="bag" value="0" placeholder="예: 10"></label>
+</div>
+
+<button onclick="calculate()">계산하기</button>
+
+<div class="result" id="result"></div>
+
+<script>
+function calculate() {
+    // 입력값
+    const car = Number(document.getElementById('car').value);
+    const bus = Number(document.getElementById('bus').value);
+    const subway = Number(document.getElementById('subway').value);
+    const drink = Number(document.getElementById('drink').value);
+    const snack = Number(document.getElementById('snack').value);
+    const meat = Number(document.getElementById('meat').value);
+    const acHours = Number(document.getElementById('ac').value);
+    const online = Number(document.getElementById('online').value);
+    const bag = Number(document.getElementById('bag').value);
+
+    // CO2 배출계수 (kg CO2eq)
+    const CO2 = {
+        car: 0.21,
+        bus: 0.1,
+        subway: 0.05,
+        drink: 0.1,
+        snack: 0.05,
+        meat: 0.5,
+        ac: 0.4,      // 1시간 기준
+        online: 0.3,
+        bag: 0.02
+    };
+
+    // 계산
+    const transportCO2 = car*CO2.car + bus*CO2.bus + subway*CO2.subway;
+    const foodCO2 = drink*CO2.drink + snack*CO2.snack + meat*CO2.meat;
+    const acKwh = acHours*1; // kWh 계산 (1시간=1kWh 기준)
+    const energyCO2 = acHours*CO2.ac + online*CO2.online + bag*CO2.bag;
+    const totalCO2 = transportCO2 + foodCO2 + energyCO2;
+
+    // 결과 출력
+    document.getElementById('result').innerHTML = `
+        <h3>탄소발자국 상세</h3>
+        <p><strong>교통:</strong> ${transportCO2.toFixed(2)} kg CO₂eq</p>
+        <p><strong>음식:</strong> ${foodCO2.toFixed(2)} kg CO₂eq</p>
+        <p><strong>에너지 / 소비:</strong> ${energyCO2.toFixed(2)} kg CO₂eq (에어컨 사용량: ${acKwh.toFixed(2)} kWh 포함)</p>
+        <p><strong>총 탄소발자국:</strong> ${totalCO2.toFixed(2)} kg CO₂eq</p>
+    `;
+}
+</script>
+
+</body>
+</html>
