@@ -143,8 +143,8 @@
           ['음료수', t_drink], ['과자', t_snack], ['고기', t_meat],
           ['에어컨 (kg)', t_ac], ['온라인 주문', t_online], ['일회용 비닐봉투', t_plastic]
         ];
-
-$('result').innerHTML = `한 달 탄소발자국: <strong>${total.toFixed(2)} kg CO₂</strong>`;
+        
+      $('result').innerHTML = `한 달 탄소발자국: <strong>${total.toFixed(2)} kg CO₂</strong>`;
 
         let html = '<ul class="break">';
         breakdown.forEach(([name,val])=>{
