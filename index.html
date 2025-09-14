@@ -1,9 +1,3 @@
-<!--
-  탄소발자국 계산기 (single-file)
-  - 배포: index.html 파일을 그대로 GitHub Pages에 올리면 됩니다.
-  - 수정: CO2 배출계수는 아래 JS 상수 CO2_FACTORS에서 변경하세요.
--->
-
 <!doctype html>
 <html lang="ko">
 <head>
@@ -39,7 +33,7 @@
     <header>
       <h1>🌍 탄소발자국 계산기</h1>
     </header>
-    <p class="lead">고등학생 실생활 항목 중심의 간단한 탄소발자국 계산기입니다. 값을 입력하고 <strong>계산하기</strong>를 누르면 한 달 기준 배출량을 보여줍니다.</p>
+    <p class="lead">부평여자고등학교에서 발생하는 쓰레기의 탄소발자국 계산기입니다. 값을 입력하고 <strong>계산하기</strong>를 누르면 한 달 기준 배출량을 보여줍니다.</p>
 
     <div class="grid">
       <div class="card">
@@ -52,11 +46,9 @@
 
         <label style="margin-top:8px">지하철 이동 거리 (km/월)</label>
         <input id="subway" type="number" min="0" placeholder="예: 60">
-        <p class="muted">도보/자전거는 배출량이 거의 없으므로 생략 가능</p>
-      </div>
 
       <div class="card">
-        <h3>식사</h3>
+        <h3>음식</h3>
         <label>소고기 식사 횟수 (회/월)</label>
         <input id="beef" type="number" min="0" placeholder="예: 4">
 
@@ -80,7 +72,7 @@
       </div>
 
       <div class="card">
-        <h3>계산 & 공유</h3>
+        <h3>계산</h3>
         <div class="row" style="margin-bottom:8px">
           <button id="calcBtn">계산하기</button>
           <button id="clearBtn" type="button">초기화</button>
@@ -88,28 +80,13 @@
 
         <div id="result" class="muted">계산 결과가 여기에 표시됩니다.</div>
 
-        <hr style="margin:12px 0">
-        <label>공유할 URL (배포 후 사이트 주소 붙여넣기)</label>
-        <input id="shareUrl" type="text" placeholder="https://아이디.github.io/저장소이름/" />
-        <div style="margin-top:8px" class="actions">
-          <button id="copyUrl">URL 복사</button>
-          <button id="makeQr">QR 코드 생성</button>
-        </div>
-        <div id="qrWrap" style="margin-top:10px;display:none">
-          <img id="qrImg" alt="QR 코드">
-          <div style="margin-top:8px"><a id="dlQr" download="carbon-qrcode.png">QR 이미지 다운로드</a></div>
-        </div>
-        <p class="small" style="margin-top:8px">참고: CO₂ 계수는 단순화된 근사값입니다. 정확한 수치는 지역/방법에 따라 달라집니다.</p>
-      </div>
-    </div>
-
     <div class="card" style="margin-top:12px">
       <h3>상세 내역</h3>
       <div id="breakdown">아직 계산하지 않았습니다.</div>
     </div>
 
     <footer>
-      만든이: 탄소발자국 계산기 · HTML 단일 파일 · 배포용
+      제작 : 2025 부평여고 진로멘토링 ATP 다썼어.
     </footer>
   </div>
 
@@ -181,31 +158,5 @@
       $('result').innerText = '계산 결과가 여기에 표시됩니다.';
       $('breakdown').innerText = '아직 계산하지 않았습니다.';
     });
-
-    // 공유 URL 초기값 (배포 후 자동으로 location.href가 들어옵니다)
-    window.addEventListener('load', ()=>{
-      try{
-        const loc = location.href;
-        if(loc && loc.startsWith('http')) $('shareUrl').value = loc;
-      }catch(e){}
-    });
-
-    // 복사
-    $('copyUrl').addEventListener('click', ()=>{
-      const v = $('shareUrl').value.trim();
-      if(!v){alert('공유할 URL을 입력하세요.'); return}
-      navigator.clipboard?.writeText(v).then(()=>alert('URL이 복사되었습니다.'), ()=>alert('복사에 실패했습니다.'));
-    });
-
-    // QR 생성 (외부 API 사용)
-    $('makeQr').addEventListener('click', ()=>{
-      const v = $('shareUrl').value.trim();
-      if(!v){alert('배포 후 사이트 주소를 여기에 붙여넣어 주세요.'); return}
-      const src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(v);
-      $('qrImg').src = src;
-      $('dlQr').href = src;
-      $('qrWrap').style.display = 'block';
-    });
-  </script>
 </body>
 </html>
