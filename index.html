@@ -72,24 +72,22 @@
         <input id="online" type="number" min="0" placeholder="예: 5">
       </div>
 
-      <div class="card">
+<div style="display:flex; flex-direction:column-reverse;">
+    <div class="card">
         <h3>계산</h3>
         <div class="row" style="margin-bottom:8px">
-          <button id="calcBtn">계산하기</button>
-          <button id="clearBtn" type="button">초기화</button>
+            <button id="calcBtn">계산하기</button>
+            <button id="clearBtn" type="button">초기화</button>
         </div>
-
-        <div id="result" class="muted">계산 결과가 여기에 표시됩니다.</div>
-
-        <hr style="margin:12px 0">
-        </div>
-      </div>
+        <div id="result" class="muted">계산 결과가 여기 표시됩니다.</div>
     </div>
 
     <div class="card" style="margin-top:12px">
-      <h3>상세 내역</h3>
-      <div id="breakdown">아직 계산하지 않았습니다.</div>
+        <h3>상세 내역</h3>
+        <div id="breakdown">아직 계산하지 않았습니다.</div>
     </div>
+</div>
+
 
     <footer>
       제작 : 25 부평여고 진로멘토링 ATP 다썼어.
@@ -163,31 +161,6 @@
       ['car','bus','subway','beef','pork','chicken','elec','cup','online'].forEach(id=>$(id).value='');
       $('result').innerText = '계산 결과가 여기에 표시됩니다.';
       $('breakdown').innerText = '아직 계산하지 않았습니다.';
-    });
-
-    // 공유 URL 초기값 (배포 후 자동으로 location.href가 들어옵니다)
-    window.addEventListener('load', ()=>{
-      try{
-        const loc = location.href;
-        if(loc && loc.startsWith('http')) $('shareUrl').value = loc;
-      }catch(e){}
-    });
-
-    // 복사
-    $('copyUrl').addEventListener('click', ()=>{
-      const v = $('shareUrl').value.trim();
-      if(!v){alert('공유할 URL을 입력하세요.'); return}
-      navigator.clipboard?.writeText(v).then(()=>alert('URL이 복사되었습니다.'), ()=>alert('복사에 실패했습니다.'));
-    });
-
-    // QR 생성 (외부 API 사용)
-    $('makeQr').addEventListener('click', ()=>{
-      const v = $('shareUrl').value.trim();
-      if(!v){alert('배포 후 사이트 주소를 여기에 붙여넣어 주세요.'); return}
-      const src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(v);
-      $('qrImg').src = src;
-      $('dlQr').href = src;
-      $('qrWrap').style.display = 'block';
     });
   </script>
 </body>
